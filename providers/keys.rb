@@ -7,7 +7,7 @@ action :csr do
     code <<-EOF
       set -eo pipefail
       export PYTHON_EGG_CACHE=/tmp
-      #{node["kagent"]["certs_dir"]}/csr.py
+      #{node["kagent"]["certs_dir"]}/csr.py --initialize
   EOF
     not_if { ::File.exists?( "#{node["kagent"]["keystore_dir"]}/node_client_truststore.jks" ) }
   end
@@ -62,6 +62,7 @@ action :return_publickey do
     group cb_group
     mode 0600
     cookbook "kagent"
+    action :create_if_missing
   end
  
  kagent_param "/tmp" do
